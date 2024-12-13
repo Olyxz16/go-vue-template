@@ -1,0 +1,20 @@
+services:
+  psql:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - psql_volume:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}
+      interval: 30s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+
+volumes:
+  psql_volume:
